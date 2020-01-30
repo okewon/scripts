@@ -229,4 +229,5 @@ SELECT ename, job, sal,
                    'PRESIDENT', sal * 1.2,
                    sal) bonus_sal
 FROM emp;
-            
+
+-- 연습문제 풀이 때문에 수정함
