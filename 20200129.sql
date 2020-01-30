@@ -222,10 +222,11 @@ SELECT ename, job, sal,
         END bonus_sal
 FROM emp;
 
--- 2. DECODE, CASE 혼용해서
+-- 2. DECODE, CASE 혼용해서 (DECODE안에 CASE나 DECODE 구문이 중첩이 가능하다)
 SELECT ename, job, sal,
       DECODE(job, 'SALESMAN', CASE WHEN sal > 1400  THEN sal * 1.05 WHEN sal < 1400 THEN sal * 1.1 END,
                    'MANAGER', sal * 1.1,
-                   'PRESIDENT', sal * 1.2) bonus_sal
+                   'PRESIDENT', sal * 1.2,
+                   sal) bonus_sal
 FROM emp;
             
