@@ -251,7 +251,7 @@ ORDER BY loc DESC;
 SELECT *
 FROM emp
 WHERE comm IS NOT NULL AND comm <> 0
-ORDER BY comm DESC, empno;
+ORDER BY comm DESC, empno ASC;
 
 -- emp 테이블에서 관리자가 있는 사람들만 조회하고 직군(job)순으로 오름차순 정렬하고,
 -- 직업이 같을 경우 사번이 큰 사원이 먼저 조회되도록 쿼리를 작성하세요

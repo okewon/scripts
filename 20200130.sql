@@ -166,6 +166,9 @@ FROM dept;
 
 -- 직원이 속한 부서의 개수를 조회하는 쿼리를 작성하시오
 -- (emp 테이블 사용)
+-- 부서가 뭐가 있는지 : 10, 20, 30 --> 3개의 row가 존재 --> 테이블의 row 수를 조회 : GROUP BY 없이 COUTN(*)
+-- 배열, 포인터, 파일 입출력
+-- GROUP BY, JOIN
 SELECT *
 FROM emp
 ORDER BY deptno;
