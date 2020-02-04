@@ -22,10 +22,11 @@ GROUP BY customer.cid, customer.cnm, cycle.pid, product.pnm;
 
 -- erd 다이어그램을 참고하여 cycle, product 테이블을 이용하여 제품별 개수의 합과 제품명을 다음과 같은 결과가 나오도록 쿼리를 작성해보세요
 -- (*정렬과 관계없이 값이 맞으면 정답)
-SELECT cycle.pid, product.pnm, COUNT(product.pnm) cnt
+SELECT cycle.pid, product.pnm, COUNT(product.pnm)
 FROM cycle, product
 WHERE cycle.pid = product.pid
-GROUP BY product.pid, product.pnm;
+GROUP BY cycle.pid, product.pnm
+ORDER BY product.pnm;
 
 SELECT *
 FROM dba_users;
@@ -125,12 +126,13 @@ SELECT *
 FROM prod;
 
 -- outer join1에서 작업을 시작하세요. buy_date 컬럼이 null인 항목이 안나오도록 다음처럼 데이터를 채워지도록 쿼리를 작성하세요.
-SELECT buyprod.buy_date, buyprod.buy_prod, prod.prod_id, prod.prod_name, buyprod.buy_qty
-FROM buyprod RIGHT OUTER JOIN prod ON (buyprod.buy_prod = prod.prod_id AND buyprod.buy_date = TO_DATE('2005-01-25', 'YYYY-MM-DD')); 
+SELECT NVL(buyprod.buy_date, TO_DATE('2005-01-25', 'YYYY-MM-DD')), buyprod.buy_prod, prod.prod_id, prod.prod_name, buyprod.buy_qty
+FROM prod LEFT OUTER JOIN buyprod ON (buyprod.buy_prod = prod.prod_id AND buyprod.buy_date = TO_DATE('2005-01-25', 'YYYY-MM-DD')); 
 
 -- outer join2에서 작업을 시작하세요.
 -- buy_qty 컬럼이 null일 경우 0으로 보이도록 쿼리를 수정하세요.
-
+SELECT NVL(buyprod.buy_date, TO_DATE('2005-01-25', 'YYYY-MM-DD')), buyprod.buy_prod, prod.prod_id, prod.prod_name, NVL(buyprod.buy_qty, 0)
+FROM prod LEFT OUTER JOIN buyprod ON (buyprod.buy_prod = prod.prod_id AND buyprod.buy_date = TO_DATE('2005-01-25', 'YYYY-MM-DD')); 
 
 
 
