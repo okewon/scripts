@@ -147,6 +147,10 @@ SELECT member.mem_id, member.mem_name, prod.prod_id, prod.prod_name, cart.cart_q
 FROM member, prod, cart
 WHERE member.mem_id = cart.cart_member AND cart.cart_prod = prod.prod_id;
 
+-- ANSI 문법
+SELECT member.mem_id, member.mem_name, prod.prod_id, prod.prod_name, cart.cart_qty
+FROM member JOIN cart ON (member.mem_id = cart.cart_member) JOIN prod ON cart.cart_prod = prod.prod_id;
+
 -- erd 다이어그램을 참고하여 customer, cycle 테이블을 조인하여 고객별 애음 제품, 애음요일, 개수를 다음과 같은 결과가 나오도록 쿼리를 작성해보세요
 -- (고객명이 brown, sally인 고객만 조회)
 -- (*정렬과 관계없이 값이 맞으면 정답)
