@@ -213,6 +213,11 @@ DELETE dept
 WHERE deptno = 99;
 
 COMMIT;
+-- dept 테이블에는 5건의 데이터가 존재
+-- emp 테이블에는 14명의 직원이 있고, 직원은 하나의 부서에 속해 있다.(deptno)
+-- 부서 중 직원이 속해 있지 않은 부서 정보를 조회
+
+-- 서브쿼리에서 데이터의 조건이 맞는지 확인자 역할을 하는 서브쿼리 작성
 
 -- 상호연관
 SELECT *
@@ -223,14 +228,18 @@ WHERE deptno NOT IN (SELECT deptno
 ORDER BY deptno DESC;
 
 -- 비상호연관
-
+SELECT *
+FROM dept
+WHERE deptno NOT IN (SELECT deptno
+                     FROM emp)
+ORDER BY deptno DESC;
 
 -- cycle, product 테이블을 이용하여 cid = 1인 고객이 애음하지 않는 제품을 조회하는 쿼리를 작성하세요
 SELECT pid, pnm
 FROM product
 WHERE pid NOT IN (SELECT pid
                   FROM cycle
-                  WHERE cycle.cid = 1);
+                  WHERE cid = 1);
                   
 SELECT *
 FROM product;
