@@ -213,10 +213,40 @@ FROM fastfood
 WHERE GB = '롯데리아'
 GROUP BY sido, sigungu;
 
-SELECT b.sido, b.sigungu, ROUND(((b.버거킹 + m.맘스터치 + d.맥도날드) / l.롯데리아),1) 버거지수
+SELECT b.sido, b.sigungu, ROUND(((b.버거킹 + m.맘스터치 + d.맥도날드 + F.kfc) / l.롯데리아),2) 버거지수
 FROM (SELECT sido, sigungu, COUNT(sigungu) 버거킹 FROM fastfood WHERE GB = '버거킹' GROUP BY sido, sigungu) b,
      (SELECT sido, sigungu, COUNT(sigungu) 맘스터치 FROM fastfood WHERE GB = '맘스터치' GROUP BY sido, sigungu) m,
      (SELECT sido, sigungu, COUNT(sigungu) 맥도날드 FROM fastfood WHERE GB = '맥도날드' GROUP BY sido, sigungu) d,
-     (SELECT sido, sigungu, COUNT(sigungu) 롯데리아 FROM fastfood WHERE GB = '롯데리아' GROUP BY sido, sigungu) l
-WHERE (b.sido = m.sido AND b.sigungu(+) = m.sigungu) AND (m.sido = d.sido AND m.sigungu(+) = d.sigungu) AND (d.sido = l.sido AND d.sigungu(+) = l.sigungu) AND (b.sido = l.sido AND b.sigungu = l.sigungu)
+     (SELECT sido, sigungu, COUNT(sigungu) 롯데리아 FROM fastfood WHERE GB = '롯데리아' GROUP BY sido, sigungu) l,
+     (SELECT sido, sigungu, COUNT(sigungu) kfc FROM fastfood WHERE GB = 'KFC' GROUP BY sido, sigungu) F
+WHERE (b.sido = m.sido AND b.sigungu(+) = m.sigungu) AND (m.sido = d.sido AND m.sigungu(+) = d.sigungu) AND (d.sido = l.sido AND d.sigungu(+) = l.sigungu) AND (F.sido = l.sido AND F.sigungu = l.sigungu) AND (F.sido = b.sido AND F.sigungu = b.sigungu)
+ORDER BY 버거지수 DESC, sigungu DESC;
+
+
+SELECT (bg.sido||bg.sigungu)city , bg.bcity 버거, lt.lcity 롯데리아, ROUND(bg.bcity/lt.lcity,2) 버거지수
+FROM
+    (SELECT sido, sigungu, COUNT(*)bcity
+    FROM fastfood
+    WHERE gb = '버거킹' OR gb = 'KFC' OR gb = '맥도날드'
+    GROUP BY sido, sigungu)bg,
+    (SELECT sido,sigungu, COUNT(*)lcity
+    FROM fastfood
+    WHERE gb = '롯데리아'
+    GROUP BY sido, sigungu)lt
+WHERE bg.sido = lt.sido AND bg.sigungu = lt.sigungu
 ORDER BY 버거지수 DESC;
+
+-- fastfood 테이블을 한번만 읽는 방식으로 작성하기
+SELECT sido, sigungu, ROUND(((kfc + burgerking + mc) / lot), 2) burger_score
+FROM
+(SELECT sido, sigungu,
+       NVL(SUM(decode(gb, 'KFC', 1)), 0) kfc ,NVL(SUM(decode(gb, '버거킹', 1)), 0) burgerking,
+       NVL(SUM(decode(gb, '맥도날드', 1)), 0) mc, NVL(SUM(decode(gb, '롯데리아', 1)), 1) lot
+FROM fastfood
+WHERE gb IN ('KFC', '버거킹', '맥도날드', '롯데리아')
+GROUP BY sido, sigungu)
+ORDER BY burger_score DESC;
+
+
+SELECT *
+FROM tax;
